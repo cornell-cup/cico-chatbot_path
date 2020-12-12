@@ -118,9 +118,9 @@ def validInput(text: str) -> int:
 
 def runFromChatBot(chatbot_input):
     if isnumeric_custom(chatbot_input[0]) and isnumeric_custom(chatbot_input[1]):
-        dynamicGridSimulation(getLocation(text))
+        dynamicGridSimulation(chatbot_input)
     else:
-        commandExecute(getCommand(text))
+        commandExecute(chatbot_input)
 
 def userInput():
     printScreen()
