@@ -116,6 +116,11 @@ def validInput(text: str) -> int:
     except:
         return 6
 
+def runFromChatBot(chatbot_input):
+    if isnumeric_custom(chatbot_input[0]) and isnumeric_custom(chatbot_input[1]):
+        dynamicGridSimulation(getLocation(text))
+    else:
+        commandExecute(getCommand(text))
 
 def userInput():
     printScreen()
