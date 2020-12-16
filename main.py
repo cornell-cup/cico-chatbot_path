@@ -23,6 +23,9 @@ import json
 import io
 import socket
 
+# path_planning
+from pathPlanning import *
+
 print(os.getcwd())
 credential_path = "api_keys/speech_to_text.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
@@ -40,6 +43,7 @@ def main():
         speech = live_streaming.get_string(answer)
         confidence = live_streaming.get_confidence(answer)
         print(speech)
+        # speech = input()
 
         if "quit" in speech or "stop" in speech:
             break
@@ -54,7 +58,9 @@ def main():
                 # task is to transfer over to facial recognition client program
             elif path_planning.isLocCommand(speech.lower()):
                 print("Move command: ")
-                print(path_planning.process_loc(speech.lower()))
+                command = path_planning.process_loc(speech.lower())
+                print(command)
+                runFromChatBot(command)
                 # task is to transfer over to path planning on the system
             elif object_detection.isObjCommand(speech.lower()):
                 print("Object to pick up: " +

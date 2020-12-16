@@ -3,6 +3,7 @@ import re
 import nlp_util
 import nltk
 import math
+import string
 from quantulum3 import parser
 
 
@@ -14,9 +15,9 @@ def preprocess(text):
 
     @param text: the original text (must be in lowercase)
     """
+    text = text.translate(str.maketrans('', '', string.punctuation))
     quant = parser.parse(text)
     for q in quant:
-        print(q)
         words = str(q).split(' ')
         number_word = words[0]
         number = int(q.value)
@@ -92,25 +93,26 @@ def process_loc(text):
     tagged_list = nltk.pos_tag(nltk.word_tokenize(text))
     verbs_and_nouns = [tup[0]
                        for tup in tagged_list if tup[1] == 'NN' or tup[1] == 'VB' or tup[1] == 'VBP']
+    # DEBUG THISSSS
+    words = nltk.word_tokenize(text)
 
     for verb in verbs_and_nouns:
         if verb == "stop":
             return ("stop", 0)
         elif verb in ["turn", "spin", "rotate"]:
             mode = 1
+            break
         elif verb in ["move", "go", "drive", "travel"]:
             mode = 2
+            break
     # print(locPhrase)
     if mode == 1:
         number, unit, direction = get_loc_params(locPhrase[0])
         if unit == "radian":
             number = number * 180 / math.pi
-        if direction == "left":
-            direction = "counterclockwise"
-        elif direction == "right":
-            direction = "clockwise"
-        # direction: clockwise or counterclockwise, number in degrees
-        return (direction, number)
+        if direction == "left" or direction == "counterclockwise":
+            number = -1 * number
+        return ("turn", number)
     if mode == 2:
         if len(locPhrase) > 1:
             x = 0
@@ -138,20 +140,20 @@ def process_loc(text):
                     x += number
                 elif direction == "backward":
                     y -= number
-            return (round(x, 2), round(y, 2))
+            return (float(round(x, 2)), float(round(y, 2)))
         elif len(locPhrase) > 0:
             number, unit, direction = get_loc_params(locPhrase[0])
             if unit == "foot":
                 number = number * 0.3048
-            number = round(number, 2)
+            number = float(round(number, 2))
             if direction == "forward":
                 return ("move forward", number)
             elif direction == "left":
-                return (-number, 0)
+                return (-number, 0.0)
             elif direction == "right":
-                return (number, 0)
+                return (number, 0.0)
             elif direction == "backward":
-                return (0, -number)
+                return (0.0, -number)
             else:
                 return ("unknown", 0)
 

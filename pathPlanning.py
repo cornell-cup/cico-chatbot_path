@@ -4,6 +4,7 @@ from tkinter import *
 from Consts import *
 from RandomObjects import RandomObjects
 
+
 def validLocation(text: str) -> int:
     """
     takes in text and outputs 1 if the text is a valid location on the grid,
@@ -61,6 +62,7 @@ def getLocation(text: str) -> (int, int):
 
     return (first_num, second_num)
 
+
 def getCommand(text: str) -> (str, int):
     """
     Precondition: text is a valid command
@@ -74,11 +76,13 @@ def getCommand(text: str) -> (str, int):
     second = text[comma_index + 1:second_paren_index]
     return (str(first), float(second))
 
+
 def isnumeric_custom(text: str) -> bool:
     if text[0] == '-':
         return text[1:].isnumeric()
     else:
         return text.isnumeric()
+
 
 def validInput(text: str) -> int:
     """
@@ -109,18 +113,22 @@ def validInput(text: str) -> int:
             ret = 2
             if first != 'turn' and first != 'forward':
                 ret = 4
-            if float(second) < -360 or 360 < float(second):    
+            if float(second) < -360 or 360 < float(second):
                 ret = 5
         return ret
 
     except:
         return 6
 
+
 def runFromChatBot(chatbot_input):
-    if isnumeric_custom(chatbot_input[0]) and isnumeric_custom(chatbot_input[1]):
+    if isinstance(chatbot_input[0], float):
+        print("coordinate")
         dynamicGridSimulation(chatbot_input)
     else:
+        print("commandExecute")
         commandExecute(chatbot_input)
+
 
 def userInput():
     printScreen()
@@ -141,14 +149,15 @@ def userInput():
             print("Your command amount is out of the specified range, (0::30m) for forward or (-360::360) for turn")
         if validity == 6:
             print("Your input was MALFORMED")
-        text = input( 
+        text = input(
             "NEW COMMAND INPUT: ")
         validity = validInput(text)
 
-    if validity == 1:  
+    if validity == 1:
         dynamicGridSimulation(getLocation(text))
     if validity == 2:
         commandExecute(getCommand(text))
+
 
 def dynamicGridSimulation(endPoint):
     """
@@ -176,6 +185,7 @@ def dynamicGridSimulation(endPoint):
     simulation = DynamicGUI(Tk(), fullMap, emptyMap, search.segment_path(emptyMap, path), endPoint, 180)
     simulation.runSimulation()
 
+
 def commandExecute(command):
     """
     Run A command execution with C1C0 that executes the command
@@ -195,7 +205,7 @@ def commandExecute(command):
     midX = tile_size * tile_num_width / 2
     midY = tile_size * tile_num_height / 2
 
-    if command[0] == 'forward':
+    if command[0] == 'move forward':
         # TODO: THIS IS FILLER CODE FOR WHEN WE CAN
          # Run algorithm to get path
         first_num = 0
@@ -206,16 +216,18 @@ def commandExecute(command):
         dists, path = search.a_star_search(
             emptyMap, (midX, midY), endPoint, search.euclidean)
         # start GUI and run animation
-        simulation = DynamicGUI(Tk(), fullMap, emptyMap, search.segment_path(emptyMap, path), endPoint, 0)
+        simulation = DynamicGUI(Tk(), fullMap, emptyMap,
+                                search.segment_path(emptyMap, path), endPoint, 0)
         simulation.runSimulation()
     if command[0] == 'turn':
-        endPoint = (tile_num_width * tile_size / 2, tile_num_height * tile_size / 2)
+        endPoint = (tile_num_width * tile_size / 2,
+                    tile_num_height * tile_size / 2)
         dists, path = search.a_star_search(
             emptyMap, (midX, midY), endPoint, search.euclidean)
         # start GUI and run animation
-        simulation = DynamicGUI(Tk(), fullMap, emptyMap, search.segment_path(emptyMap, path), endPoint, (command[1] + 180) % 360)
+        simulation = DynamicGUI(Tk(), fullMap, emptyMap, search.segment_path(
+            emptyMap, path), endPoint, (command[1] + 180) % 360)
         simulation.runSimulation()
-
 
     # # Run algorithm to get path
     # dists, path = search.a_star_search(
