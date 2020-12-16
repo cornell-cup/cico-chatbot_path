@@ -173,7 +173,7 @@ def dynamicGridSimulation(endPoint):
     dists, path = search.a_star_search(
         emptyMap, (midX, midY), endPoint, search.euclidean)
     # start GUI and run animation
-    simulation = DynamicGUI(Tk(), fullMap, emptyMap, search.segment_path(emptyMap, path), endPoint, 0)
+    simulation = DynamicGUI(Tk(), fullMap, emptyMap, search.segment_path(emptyMap, path), endPoint, 180)
     simulation.runSimulation()
 
 def commandExecute(command):

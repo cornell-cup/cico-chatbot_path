@@ -296,12 +296,10 @@ class DynamicGUI():
         """
         try:
             if self.desired_heading is not None and self.heading == self.desired_heading:
-                self.draw_headings()
                 self.output_state = "move forward"
                 print(self.output_state)
 
             if self.desired_heading is not None and self.heading != self.desired_heading:
-                self.draw_headings()
                 if self.heading < self.desired_heading:
                     cw_turn_degrees = 360 + self.heading - self.desired_heading
                     ccw_turn_degrees = self.desired_heading - self.heading
@@ -327,7 +325,6 @@ class DynamicGUI():
                 elif self.heading >= 360:
                     self.heading = self.heading - 360
                 if self.desired_heading == self.heading and self.just_turn!=0:
-                    self.draw_headings()
                     print("C1C0 has turned to face the correct angle")
                     return
                 self.master.after(speed_dynamic, self.updateGridSmoothed)
