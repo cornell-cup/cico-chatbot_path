@@ -308,6 +308,7 @@ class DynamicGUI():
                     ccw_turn_degrees = 360 - self.heading + self.desired_heading
                 if abs(self.desired_heading - self.heading) < turn_speed:
                     if self.just_turn != 0:
+                        self.draw_headings()
                         print("C1C0 has turned to face the correct angle")
                         return
                     self.heading = self.desired_heading
