@@ -301,9 +301,11 @@ class DynamicGUI():
 
             if self.desired_heading is not None and self.heading != self.desired_heading:
                 if self.heading < self.desired_heading:
+                    self.draw_headings()
                     cw_turn_degrees = 360 + self.heading - self.desired_heading
                     ccw_turn_degrees = self.desired_heading - self.heading
                 else:
+                    self.draw_headings()
                     cw_turn_degrees = self.heading - self.desired_heading
                     ccw_turn_degrees = 360 - self.heading + self.desired_heading
                 if abs(self.desired_heading - self.heading) < turn_speed:
